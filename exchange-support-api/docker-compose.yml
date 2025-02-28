@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # Servicio de la aplicación Spring Boot
+  exchange-support-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: exchange-support-api
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=admin
+      - SPRING_RABBITMQ_PASSWORD=admin
+      - SPRING_R2DBC_URL=r2dbc:h2:mem:///postdb;DB_CLOSE_DELAY=-1
+      - SPRING_R2DBC_USERNAME=sa
+      - SPRING_R2DBC_PASSWORD=
+      - SPRING_R2DBC_PROPERTIES_SCHEMA=CREATE
+    # depends_on:
+    #   rabbitmq:
+    #     condition: service_healthy
+    # networks:
+    #   - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge

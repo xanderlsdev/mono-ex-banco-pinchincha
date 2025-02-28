@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 @RestController
 @RequestMapping("/exchange")
@@ -62,5 +61,7 @@ public class ExchangeController {
     exchangeService.sendToQueue(exchangeRateAudit);
 
     return Mono.just(response);
+
+    // return exchangeService.sendRequest(exchangeRateAudit).then(Mono.just(response));
   }
 }

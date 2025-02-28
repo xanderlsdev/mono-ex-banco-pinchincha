@@ -22,7 +22,7 @@ public class ExchangeRateAuditService {
       // .fromCallable(() -> {
       //   try {
       //     System.out.println("Durmiendo el hilo...");
-      //     Thread.sleep(5000); // 5 segundos de espera
+      //     Thread.sleep(10000); // 10 segundos de espera
       //   } catch (InterruptedException e) {
       //     Thread.currentThread().interrupt();
       //   }

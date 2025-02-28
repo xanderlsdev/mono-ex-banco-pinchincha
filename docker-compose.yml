@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # Servicio RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"  # Puerto para las conexiones de la aplicación
+      - "15672:15672" # Puerto para la interfaz web de administración
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Primer servicio Spring Boot: exchange-api
+  exchange-api:
+    build:
+      context: ./exchange-api
+      dockerfile: Dockerfile
+    container_name: exchange-api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=admin
+      - SPRING_RABBITMQ_PASSWORD=admin
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # Segundo servicio Spring Boot: exchange-support-api
+  exchange-support-api:
+    build:
+      context: ./exchange-support-api
+      dockerfile: Dockerfile
+    container_name: exchange-support-api
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=admin
+      - SPRING_RABBITMQ_PASSWORD=admin
+      - SPRING_R2DBC_URL=r2dbc:h2:mem:///postdb;DB_CLOSE_DELAY=-1
+      - SPRING_R2DBC_USERNAME=sa
+      - SPRING_R2DBC_PASSWORD=
+      - SPRING_R2DBC_PROPERTIES_SCHEMA=CREATE
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
