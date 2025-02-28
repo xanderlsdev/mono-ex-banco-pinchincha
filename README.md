@@ -4,17 +4,24 @@ Documentación del proceso de construcción y despliegue del proyecto
 
 ## Despliegue
 
-```bash
-docker-compose up --build -d
-or
-docker compose up --build -d
-```
+- Comando para desplegar la aplicación de intercambio de monedas
+
+  ```bash
+  docker-compose up --build -d
+  or
+  docker compose up --build -d
+  ```
+
+- Comando para detener la aplicación de intercambio de monedas
+  ```bash
+  docker-compose down
+  ```
 
 ## Rutas de acceso
 - Lista de Usuarios Fake: [https://gorest.co.in/public/v2/users](https://gorest.co.in/public/v2/users)
 - Exchange: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
-- Exchange Support: [http://localhost:8081/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- Exchange Support: [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
 
 - RabbitMQ: [http://localhost:15672](http://localhost:15672)
     - Usuario: admin
